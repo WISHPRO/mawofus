@@ -6,4 +6,5 @@ Snippets for the WordPress functions.php file that I tend to use a lot.
 
 ## Sources
 
-
+- [CSS Tricks](http://css-tricks.com/snippets/wordpress/)
+- myself
