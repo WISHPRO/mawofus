@@ -1,5 +1,17 @@
 <?php
 
+// Automatic database optimizing.
+define('WP_ALLOW_REPAIR', true);
+
+
+// Don't ever empty the trash.
+define('EMPTY_TRASH_DAYS', 0);
+
+
+// Never cache.
+nocache_headers();
+
+
 // Disable visual editor.
 add_filter('user_can_richedit', create_function('$a', 'return false;') , 50);
 
@@ -115,5 +127,15 @@ function add_user_fields($contactmethods) {
   return $contactmethods;
 }
 add_filter('user_contactmethods', 'add_user_fields', 10, 1);
+
+
+// Markdown breaks autoembedding by wrapping URLs on their own line in paragraphs. This fixes that problem.
+function oembed_fixer($content) {
+  global $wp_embed;
+  return preg_replace_callback( '|^\s*<p>(https?://[^\s"]+)</p>\s*$|im', array($wp_embed, 'autoembed_callback'), $content );
+}
+if (get_option('embed_autourls'))
+  add_filter('the_content', 'oembed_fixer', 8);
+
 
 ?>
