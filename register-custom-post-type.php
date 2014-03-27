@@ -44,9 +44,9 @@ function add_custom_post_type() {
     'capability_type'     => 'page',
   );
 
-  register_post_type( 'post_type', $args );
+  register_post_type('post_type', $args);
 
 }
-add_action( 'init', 'custom_post_type', 0 );
+add_action('init', 'custom_post_type', 0);
 
 ?>
