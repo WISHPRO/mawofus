@@ -2,7 +2,7 @@
 
 // Register custom post type.
 //
-// Documentation: http://codex.wordpress.org/Post_Types
+// Documentation: http://codex.wordpress.org/Function_Reference/register_post_type
 // Generator: http://generatewp.com/post-type/
 
 function add_custom_post_type() {
