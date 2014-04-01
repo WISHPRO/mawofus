@@ -2,6 +2,8 @@
 
 // TODO: Clean up and generalize.
 
+// Help: http://justintadlock.com/archives/2011/06/27/custom-columns-for-custom-post-types
+
 // Remove the default 'Date' column from the post list and replace it with the start_date field.
 
 // Register the column
