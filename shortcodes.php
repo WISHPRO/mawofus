@@ -17,4 +17,11 @@ function clear_shortcode() {
 add_shortcode('clear', 'clear_shortcode');
 
 
+// [pullquote]enclosed content[/pullquote]
+// Enclosing.
+function pullquote_shortcode($atts, $content = null) {
+  return '<div class="pullquote">$content</div>';
+}
+add_shortcode('pullquote', 'pullquote_shortcode')
+
 ?>
