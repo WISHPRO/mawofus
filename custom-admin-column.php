@@ -6,48 +6,72 @@
 
 // Remove the default 'Date' column from the post list and replace it with the start_date field.
 
-// Register the column
-function start_date_column_register( $columns ) {
+// Set custom columns for 'Positions' admin.
+function change_edit_position_columns($columns) {
+
   $columns = array(
-    "cb" => "<input type=\"checkbox\" />",
-    "title" => "Title",
-    "start_date" => "Date"
+    'cb'       => $columns['cb'],
+    'order'    => 'Order',
+    'title'    => 'Position',
+    'subtitle' => '',
+    'name'     => 'Name',
+    'category' => 'Category'
   );
-  return $columns;
-}
-add_filter("manage_edit-event_columns", "start_date_column_register");
-
-// Display the column content
-function start_date_column_display( $column_name, $post_id ) {
-  if ( 'start_date' != $column_name )
-    return;
-
-  $start_date = get_post_meta($post_id, 'start_date', true);
-  if ( !$start_date )
-    $start_date = '<em>undefined</em>';
-
-  print(date("F d, Y", strtotime($start_date)));
-}
-add_action( 'manage_posts_custom_column', 'start_date_column_display', 10, 2 );
-
-// Register the column as sortable
-function start_date_column_register_sortable( $columns ) {
-  $columns['start_date'] = 'start_date';
 
   return $columns;
 }
-add_filter( 'manage_edit-event_sortable_columns', 'start_date_column_register_sortable' );
+add_filter('manage_position_posts_columns', 'change_edit_position_columns');
 
-function start_date_column_orderby( $vars ) {
-  if ( isset( $vars['orderby'] ) && 'start_date' == $vars['orderby'] ) {
-    $vars = array_merge( $vars, array(
-      'meta_key' => 'start_date',
-      'orderby' => 'meta_value'
-    ) );
+
+// Fill in the custom columns.
+function populate_position_columns($column, $post_id) {
+  global $post;
+
+  switch($column) {
+    case 'order':
+      echo $post->menu_order;
+      break;
+
+    case 'subtitle':
+      echo get_post_meta($post_id, 'position_subtitle', true);
+      break;
+
+    case 'name':
+      echo get_post_meta($post_id, 'name', true);
+      break;
+
+    case 'category':
+      echo get_post_meta($post_id, 'category', true);
+      break;
+
+    default:
+      break;
   }
-
-  return $vars;
 }
-add_filter( 'request', 'start_date_column_orderby' );
+add_action('manage_position_posts_custom_column', 'populate_position_columns', 10, 2);
+
+
+// Register custom columns as sortable
+function register_position_columns_as_sortable($columns) {
+  $columns['order']    = 'menu_order';
+  $columns['name']     = 'name';
+  $columns['category'] = 'category';
+  return $columns;
+}
+add_filter('manage_edit-position_sortable_columns', 'register_position_columns_as_sortable');
+
+
+// Adjust admin list column widths.
+function adjust_position_column_widths() {
+    print('
+      <style type="text/css">
+      .post-type-position .column-order     { width: 10% !important }
+      .post-type-position .column-title     { width: 25% !important }
+      .post-type-position .column-category  { width: 20% !important }
+      .post-type-position .column-position  { width: 50% !important }
+      </style>');
+}
+add_action('admin_head', 'adjust_position_column_widths');
+
 
 ?>
